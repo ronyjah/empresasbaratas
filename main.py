@@ -1,0 +1,3 @@
+from ff import *
+
+empresasBaratas()
