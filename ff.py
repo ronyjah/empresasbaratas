@@ -5,8 +5,9 @@ import locale
 import math 
 diretorio="./"
 locale.setlocale( locale.LC_ALL, '' )
-def empresasBaratas():
 
+def empresasBaratas():
+	yearCurrent = '2019'
 	chrome_options = webdriver.ChromeOptions()
 	chrome_options.add_argument('--no-sandbox')
 	prefs = {"download.default_directory" : diretorio}
@@ -38,8 +39,6 @@ def empresasBaratas():
 		indiceRoe_s = driver.find_element_by_xpath('//*[@id="resultado"]/tbody/tr['+str(index)+']/td[16]').text
 		roe.append(locale.atof(indiceRoe_s[:-1]))
 
-
-		
 	print ('DONE. Listas criadas')
 	print ('iniciando analise fundamentalista')
 	for l in range(len(empresas)):
@@ -56,6 +55,10 @@ def empresasBaratas():
 		lpa_s = driver.find_element_by_xpath('/html/body/div[1]/div[2]/table[3]/tbody/tr[2]/td[6]/span').text
 		vpa_s = driver.find_element_by_xpath('/html/body/div[1]/div[2]/table[3]/tbody/tr[3]/td[6]/span').text
 		preco_s = driver.find_element_by_xpath('/html/body/div[1]/div[2]/table[1]/tbody/tr[1]/td[4]/span').text
+		ano = driver.find_element_by_xpath('/html/body/div[1]/div[2]/table[1]/tbody/tr[2]/td[4]/span').text
+		yearLastquote = ano[6:10]
+
+
 		
 		lpa = locale.atof(lpa_s)
 		vpa = locale.atof(vpa_s)
@@ -64,7 +67,7 @@ def empresasBaratas():
 
 		precojusto = math.sqrt(22.5*vpa*lpa)
 		# Definido 80%. Sem consulta bibliogrAfica
-		if preco < (0.8*precojusto):
+		if (preco < (0.8*precojusto)) and yearLastquote == yearCurrent:
 			print(empfiltradas[l])
 
 
